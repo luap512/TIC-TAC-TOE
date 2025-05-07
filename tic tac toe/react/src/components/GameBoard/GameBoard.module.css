@@ -1,0 +1,115 @@
+/* GameBoard.module.css */
+.gameBoard{
+  overflow: hidden;
+  height: 100vh;
+}
+/* Shared font and card styling */
+.gameBoardDiv {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem auto;
+  max-width: 600px;                /* constrain width */
+  height: 50vh;
+  background: #ffffff;             /* white card */
+  border-radius: 12px;             /* rounded corners */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Heading inside the card */
+.heading {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #333333;
+}
+
+/* Table reset (no outer border) */
+.gameBoardTable {
+  position: relative;
+  border: none;
+  border-collapse: collapse;
+}
+
+/* Cells: thicker borders, hover accent */
+.cell {
+  width: 100px;
+  height: 100px;
+  border: 2px solid #555555;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 2.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.cell:hover {
+  background-color: #f0f8ff;      /* light blue hover */
+  border-color: #007acc;          /* blue accent */
+}
+
+/* Base winning-line (invisible until drawn) */
+.winning-line {
+  position: absolute;
+  background-color: #007acc;      /* blue accent */
+  z-index: 10;
+  width: 0;
+  height: 0;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+/* Row draw animation */
+.winning-line.row-0,
+.winning-line.row-1,
+.winning-line.row-2 {
+  height: 8px;
+  animation-name: drawRow;
+}
+@keyframes drawRow {
+  to { width: 100%; }
+}
+
+/* Row positioning */
+.row-0 { top: calc(16.6667% - 4px); }
+.row-1 { top: calc(50%     - 4px); }
+.row-2 { top: calc(83.3333% - 4px); }
+
+/* Column draw animation */
+.winning-line.column-0,
+.winning-line.column-1,
+.winning-line.column-2 {
+  width: 8px;
+  animation-name: drawCol;
+}
+@keyframes drawCol {
+  to { height: 100%; }
+}
+
+/* Column positioning */
+.column-0 { left: calc(16.6667% - 4px); top: 0; }
+.column-1 { left: calc(50%     - 4px); top: 0; }
+.column-2 { left: calc(83.3333% - 4px); top: 0; }
+
+/* Diagonal draw animation (reuse vertical grow) */
+.winning-line.diagonal-0,
+.winning-line.diagonal-1 {
+  width: 8px;
+  animation-name: drawCol;
+}
+
+/* Diagonal positioning & rotation */
+.diagonal-0 {
+  top: 0; left: 0;
+  transform-origin: top left;
+  transform: rotate(45deg);
+}
+.diagonal-1 {
+  top: 0; right: 0;
+  transform-origin: top right;
+  transform: rotate(-45deg);
+}

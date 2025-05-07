@@ -1,0 +1,19 @@
+.bigO {
+    font-size: 5rem; /* Adjust the size as needed */
+    display: inline-block;
+    animation: rotateScale 1s ease-in-out;
+  }
+  
+  @keyframes rotateScale {
+    0% {
+      transform: rotate(0deg) scale(1);
+      opacity: 0;
+    }
+    50% {
+      transform: rotate(180deg) scale(1.2);
+      opacity: 1;
+    }
+    100% {
+      transform: rotate(360deg) scale(1);
+    }
+  }

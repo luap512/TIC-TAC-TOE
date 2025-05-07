@@ -1,0 +1,95 @@
+/* GameView.module.css */
+
+/* Center the form on the page */
+.PlayerInfoForm {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Style the grouping container */
+  .PlayerInfoFieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Legend styling */
+  .playerInfoLegend {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: #333333;
+  }
+  
+  /* Wrapper for each label + input */
+  .inputDiv {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+  }
+  
+  /* Labels */
+  .inputDiv label {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #555555;
+  }
+  
+  /* Text inputs */
+  .inputDiv input[type="text"] {
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    border: 2px solid #cccccc;
+    border-radius: 6px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  
+  /* Focus state for inputs */
+  .inputDiv input[type="text"]:focus {
+    outline: none;
+    border-color: #007acc;
+    box-shadow: 0 0 4px rgba(0, 122, 204, 0.4);
+  }
+  
+  /* Add a nice submit button */
+  .startButton {
+    content: 'Start Game';
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 1.5rem;
+    padding: 0.75rem;
+    background-color: #007acc;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .PlayerInfoForm::after:hover {
+    background-color: #005fa3;
+  }
+  
+  /* Responsive tweaks */
+  @media (max-width: 480px) {
+    .PlayerInfoForm {
+      margin: 1rem;
+      padding: 1rem;
+    }
+    .playerInfoLegend {
+      font-size: 1.1rem;
+    }
+    .inputDiv input[type="text"] {
+      font-size: 0.9rem;
+    }
+  }
+  

@@ -1,0 +1,88 @@
+/* GameView/NavBar.module.css */
+
+/* Container card style (if you ever wrap navbar in a card) */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 60px;
+    padding: 0 20px;
+    background: #ffffff;
+    border-bottom: 3px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Actual nav bar with gradient and accent */
+  nav {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background: linear-gradient(to right, #f7faff, #eaf4ff); /* very light blue gradient */
+    padding: 0 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  
+  /* Title on the left */
+  nav .navbar-title {
+    color: #333333;
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-right: auto;
+    padding-right: 30rem;
+    cursor: default;
+    transition: color 0.3s, transform 0.3s;
+  }
+  
+  nav .navbar-title:hover {
+    color: #007acc;
+    transform: translateY(-2px);
+  }
+  
+  /* Menu list */
+  nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 1.5rem;
+  }
+  
+  /* Menu items */
+  nav li {
+    position: relative;
+  }
+  
+  /* Links */
+  nav li a {
+    color: #333333;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+  }
+  
+  /* Hover & active states */
+  nav li a:hover {
+    background-color: rgba(0, 122, 204, 0.1);
+    color: #007acc;
+    transform: translateY(-2px);
+  }
+  
+  nav li a.active,
+  nav li.active > a {
+    background-color: #007acc;
+    color: #ffffff;
+  }
+  
+  /* Decorative before icon (optional) */
+  nav li a::before {
+    content: "○";
+    margin-right: 0.5rem;
+    color: #007acc;
+    font-weight: bold;
+  }
+  
