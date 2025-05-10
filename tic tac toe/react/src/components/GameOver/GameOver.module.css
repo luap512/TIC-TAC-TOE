@@ -1,0 +1,64 @@
+/* GameOver.module.css */
+
+.gameOverCard {
+    background-color: #ffffff;             /* clean white card */
+    border-radius: 12px;                   /* soft rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* subtle drop shadow */
+    padding: 2rem;
+    max-width: 500px;
+    margin: 3rem auto;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  .gameOverTitle {
+    font-size: 2.5rem;
+    color: #333333;
+    margin-bottom: 1rem;
+  }
+  
+  .winByTitle {
+    font-size: 1.5rem;
+    color: #007acc; /* blue accent */
+    font-weight: 600;
+  }
+
+  .playAgainDiv{
+    font-size: 1.5rem;
+    color: #007acc; /* blue accent */
+    font-weight: 600;
+  }
+
+  .playAgainButton {
+    background-color: #ffffff;
+    color: #007acc;
+    border: 2px solid #007acc;
+    border-radius: 8px;
+    padding: 0.5rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    margin-top: 1rem;
+  }
+  
+  .playAgainButton:hover {
+    background-color: #f0f8ff; /* light blue background on hover */
+    color: #005f99;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Fade-in animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

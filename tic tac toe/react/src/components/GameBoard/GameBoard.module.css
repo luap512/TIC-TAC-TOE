@@ -99,17 +99,31 @@
 .winning-line.diagonal-0,
 .winning-line.diagonal-1 {
   width: 8px;
-  animation-name: drawCol;
+  height: 80px;
+  animation-name: drawDiag;
 }
 
 /* Diagonal positioning & rotation */
 .diagonal-0 {
   top: 0; left: 0;
+  height:80px;
   transform-origin: top left;
-  transform: rotate(45deg);
+  transform: rotate(-42deg);
 }
 .diagonal-1 {
-  top: 0; right: 0;
+  top: -0; right: -0;
+  height: 80px;
   transform-origin: top right;
-  transform: rotate(-45deg);
+  transform: rotate(42deg);
+}
+
+@keyframes drawDiag {
+  to { height: 135%; }
+}
+
+.gameOverDiv{
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+  align-content: center;
 }

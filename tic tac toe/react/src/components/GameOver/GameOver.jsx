@@ -1,13 +1,31 @@
 import styles from '../GameOver/GameOver.module.css';
-export default function GameOver({winType}){
+import { NavLink } from 'react-router-dom';
+import { useState } from 'react';
+export default function GameOver({winType, winner}){
 
-    console.log(winType);
-
+    const isDraw = winner === '';
+    
     return(
         <>
-
-            <h1>GameOver</h1>
-            <h2>WIN BY: {winType}</h2>
+            <div className={styles.gameOverCard}>
+                {isDraw ? 
+                    <>
+                        <h2 className={styles.gameOverTitle}>TIC-TAC-TOE</h2>
+                        <h1 className={styles.winByTitle}>{winType}</h1>
+                    </>
+                    :
+                    <>
+                        <h2 className={styles.gameOverTitle}>GOOD GAME!</h2>
+                        <h1 className={styles.winByTitle}>{winner} wins by {winType}</h1>
+                    </>
+                }
+                
+                <div className={styles.playAgainDiv}>
+                    <button className={styles.playAgainButton}>
+                            <NavLink to="/GameView" className='navbar-link' state={{ reset: true}}>PLAY AGAIN</NavLink>
+                    </button>
+                </div>
+            </div>
         </>
     );
 }

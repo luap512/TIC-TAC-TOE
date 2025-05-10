@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import axios from 'axios';
-
+import styles from '../src/App.module.css';
 import App from './App.jsx'
 
 /* import fontawesome core */
@@ -25,6 +25,8 @@ axios.defaults.baseURL = import.meta.env.VITE_REMOTE_API;
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <div className={styles.appRoot}>
+      <App />
+    </div>
   </StrictMode>,
 )

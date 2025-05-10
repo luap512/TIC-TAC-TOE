@@ -1,5 +1,7 @@
 /* GameView.module.css */
-
+.gameViewDiv{
+  overflow-y: auto;
+}
 /* Center the form on the page */
 .PlayerInfoForm {
     max-width: 400px;

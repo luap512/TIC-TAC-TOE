@@ -16,6 +16,7 @@ export default function GameBoard({playerOneName, playerTwoName}){
     // track the win type
     const[winType, setWinType] = useState('');
     // track the winner
+    const[winner, setWinner] = useState('');
 
     // track the winning line 
     const [winningLine, setWinningLine] = useState(null);  // null, 'row', 'col', or 'diagonal'
@@ -64,7 +65,7 @@ export default function GameBoard({playerOneName, playerTwoName}){
 
     }
 
-    function checkBoardState(boardState){
+    function checkBoardState(boardState, turnCounter){
         // loop thru rows
         for(let i = 0; i < boardState.length; i++){
             if(boardState[i][1] !== null && boardState[i][0] === boardState[i][1] && boardState[i][1] === boardState[i][2])
@@ -73,6 +74,12 @@ export default function GameBoard({playerOneName, playerTwoName}){
                 setGameOver(true);
                 setWinningLine({ type: 'row', index: i});
                 setWinType('Row')
+                if(turnCounter % 2 === 0){
+                  setWinner(playerOneName);
+                }
+                else{
+                  setWinner(playerTwoName);
+                }
                 return;
             }
         }
@@ -85,6 +92,12 @@ export default function GameBoard({playerOneName, playerTwoName}){
                     setGameOver(true);
                     setWinningLine({ type: 'column', index: j});
                     setWinType('Column');
+                    if(turnCounter % 2 === 0){
+                      setWinner(playerOneName);
+                    }
+                    else{
+                      setWinner(playerTwoName);
+                    }
                     return;
                 }
     
@@ -94,6 +107,12 @@ export default function GameBoard({playerOneName, playerTwoName}){
             setGameOver(true);
             setWinningLine({ type: 'diagonal', index: 0});
             setWinType('Diagonal');
+            if(turnCounter % 2 === 0){
+              setWinner(playerOneName);
+            }
+            else{
+              setWinner(playerTwoName);
+            }
             return;
         }
         if(boardState[1][1] !== null && boardState[0][2] === boardState[1][1] && boardState[1][1] === boardState[2][0])
@@ -101,32 +120,33 @@ export default function GameBoard({playerOneName, playerTwoName}){
             setGameOver(true);
             setWinningLine({ type: 'diagonal', index: 1});
             setWinType('Diagonal');
+            if(turnCounter % 2 === 0){
+              setWinner(playerOneName);
+            }
+            else{
+              setWinner(playerTwoName);
+            }
             return;
         }
     }
     
     // check the board state every time it changes
     useEffect(() => {
-        checkBoardState(boardState);
+        checkBoardState(boardState, turnCounter);
     }, [boardState],[winType]);
-
-    function resetGame() {
-        setBoardState(Array(3).fill(null).map(() => Array(3).fill(null)));
-        setTurnCounter(1);
-        setGameOver(false);
-        setWinType('');
-        setWinningLine(null);
-      }
-
-
-    if(gameOver){
-        return <GameOver winType={winType}/>
-    }
 
     return (
         <div className={styles.gameBoard}>
             <VersusCard playerOneName={playerOneName} playerTwoName={playerTwoName}/>
+            
           <div className={styles.gameBoardDiv}>
+          {gameOver ? 
+              <div className={styles.gameOverDiv}>
+                  <GameOver winType={winType} winner={winner} />
+              </div>
+                : 
+              <div></div> 
+            }
             <table className={styles.gameBoardTable}>
               <tbody className={styles.gameBoardBody}>
                 {[0, 1, 2].map((row) => (
