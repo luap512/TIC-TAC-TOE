@@ -1,9 +1,11 @@
 import Leaderboard from "../../components/Leaderboard/Leaderboard";
+import styles from '../LeaderBoardView/LeaderBoardView.module.css';
 export default function LeaderBoardView(){
     return(
         <>
-        <h1>LEADERBOARD VIEW</h1>
-        <Leaderboard/>
+        <div className ={styles.leaderboardDiv}>
+            <Leaderboard/>
+        </div>
         </>
     );
 }

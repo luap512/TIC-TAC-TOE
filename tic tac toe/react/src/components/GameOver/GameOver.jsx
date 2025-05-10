@@ -1,6 +1,5 @@
 import styles from '../GameOver/GameOver.module.css';
 import { NavLink } from 'react-router-dom';
-import { useState } from 'react';
 export default function GameOver({winType, winner}){
 
     const isDraw = winner === '';
@@ -10,7 +9,6 @@ export default function GameOver({winType, winner}){
             <div className={styles.gameOverCard}>
                 {isDraw ? 
                     <>
-                        <h2 className={styles.gameOverTitle}>TIC-TAC-TOE</h2>
                         <h1 className={styles.winByTitle}>{winType}</h1>
                     </>
                     :

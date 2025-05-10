@@ -62,14 +62,15 @@
     font-size: 1rem;
     font-weight: 500;
     border-radius: 6px;
-    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   
   /* Hover & active states */
   nav li a:hover {
     background-color: rgba(0, 122, 204, 0.1);
     color: #007acc;
-    transform: translateY(-2px);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
   }
   
   nav li a.active,

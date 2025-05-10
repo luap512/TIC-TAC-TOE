@@ -1,8 +1,13 @@
+import LeaderboardCard from '../LeaderboardCard/LeaderBoardCard';
+import styles from '../Leaderboard/Leaderboard.module.css';
 export default function Leaderboard(){
 
     return(
         <>
-            <h1>Leaderboard component</h1>
+            <div className={styles.leaderboardDiv}>
+                <h1 className={styles.LeaderboardH1}>LEADERBOARD</h1>
+                <LeaderboardCard/>
+            </div>
         </>
     );
 }
