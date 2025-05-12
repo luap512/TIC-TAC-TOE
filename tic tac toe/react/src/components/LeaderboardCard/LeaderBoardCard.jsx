@@ -1,24 +1,5 @@
 import styles from '../LeaderboardCard/leaderboardCard.module.css';
-export default function LeaderBoardCard() {
-
-
-    const fakeUser = [
-        {   
-            name: 'Paul',
-            gamesPlayed: 69,
-            gamesWon: 69
-        },
-        {   
-            name: 'Rhino',
-            gamesPlayed: 10,
-            gamesWon: 8
-        },
-        {   
-            name: 'beep',
-            gamesPlayed: 0,
-            gamesWon: 0
-        }
-    ];
+export default function LeaderBoardCard({playerData}) {
 
   return (
         <div className={styles.leaderboardCardDiv}>
@@ -37,11 +18,11 @@ export default function LeaderBoardCard() {
             </tr>
         </thead>
         <tbody className={styles.tableBody}>
-            {fakeUser.map((user, index) => (
+            {playerData?.data?.map((player, index) => (
                 <tr className={styles.leaderboardCardTableRow} key={index}>
-                <td className={styles.leaderboardCardTD}>{user.name}</td>
-                <td className={styles.leaderboardCardTD}>{user.gamesPlayed}</td>
-                <td className={styles.leaderboardCardTD}>{user.gamesWon}</td>
+                <td className={styles.leaderboardCardTD}>{player.username}</td>
+                <td className={styles.leaderboardCardTD}>{player.gamesPlayed}</td>
+                <td className={styles.leaderboardCardTD}>{player.gamesWon}</td>
                 </tr>
             ))}  
         </tbody>
