@@ -43,7 +43,8 @@ public class JDBCPlayerDao implements PlayerDao {
     @Override
     public List<Player> getPlayers() {
         List<Player> users = new ArrayList<>();
-        String sql = "SELECT user_id, username, games_played, games_won FROM players";
+        String sql = "SELECT user_id, username, games_played, games_won FROM players\n" +
+                    "ORDER BY games_won DESC;";
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
             while (results.next()) {
@@ -94,7 +95,7 @@ public class JDBCPlayerDao implements PlayerDao {
         }
 
         // Insert new player
-        String insertUserSql = "INSERT INTO Players (username, games_played, games_won) values (?, 1, 0) RETURNING user_id";
+        String insertUserSql = "INSERT INTO Players (username, games_played, games_won) values (?, 0, 0) RETURNING user_id";
 
         try {
             int newUserId = jdbcTemplate.queryForObject(insertUserSql, Integer.class, player.getUsername());
