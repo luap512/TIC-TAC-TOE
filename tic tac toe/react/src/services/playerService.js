@@ -1,19 +1,31 @@
+
 import axios from 'axios';
 
 export default {
+
     // Get all players
     getPlayers() {
         return axios.get('http://localhost:9000/players');  // Ensure the correct full URL
     },
 
     // Get a player by username (assuming 'id' is username here)
-    getPlayerByUsername(id) {
-        return axios.get(`http://localhost:9000/players/${id}`);  // Use string interpolation to insert id
+    getPlayerById(id) {
+        return axios.get(`http://localhost:9000/players/id/${id}`);  // Use string interpolation to insert id
     },
 
-    // Update a player's data
-    updatePlayer(player) {
-        return axios.put(`http://localhost:9000/players/${player.username}`, player)
+    // Get a player by username
+    getPlayerByUsername(username) {
+        return axios.get(`http://localhost:9000/players/username/${username}`)
+            .then(response => response.data)
+            .catch(error => {
+                console.error('Error getting player by username:', error);
+                throw error;
+            });
+    },
+
+    // Update a player's data with win parameter
+    updatePlayer(username, win = false) {
+        return axios.put(`http://localhost:9000/players/username/${username}?win=${win}`)
             .then(response => {
                 console.log('Player updated successfully', response.data);
                 return response.data;  // Return the updated player data

@@ -7,135 +7,105 @@ import VersusCard from '../VersusCard/VersusCard.jsx';
 import playerService from '../../services/playerService.js';
 
 export default function GameBoard({ playerOneName, playerTwoName }) {
-
-    // counter for turns
     const [turnCounter, setTurnCounter] = useState(1);
-    // 3x3 array for tracking the state of the board. All cells are initially null.
     const [boardState, setBoardState] = useState(Array(3).fill(null).map(() => Array(3).fill(null)));
-    // track if game is over
     const [gameOver, setGameOver] = useState(false);
-    // track the win type
     const [winType, setWinType] = useState('');
-    // track the winner
     const [winner, setWinner] = useState('');
-    // track the winning line 
-    const [winningLine, setWinningLine] = useState(null);  // null, 'row', 'col', or 'diagonal'
+    const [winningLine, setWinningLine] = useState(null);
 
-    // Check if player exists, otherwise create them
     const createPlayerIfNotExists = async (username) => {
         try {
             const player = await playerService.getPlayerByUsername(username);
             if (!player) {
-                // If player doesn't exist, create them
                 const newPlayer = { username, gamesPlayed: 0, gamesWon: 0, draws: 0 };
                 await playerService.createPlayer(newPlayer);
-                return newPlayer;  // Return new player object
+                return newPlayer;
             }
-            return player;  // Return existing player
+            return player;
         } catch (error) {
             console.error('Error checking or creating player:', error);
         }
     };
 
-    function handleCellClick(row, col) {
-        let newBoard = boardState.map(row => row.slice());
+    const updatePlayerStats = async (winnerName, result) => {
+        // Make sure players exist in database
+        await createPlayerIfNotExists(playerOneName);
+        await createPlayerIfNotExists(playerTwoName);
 
-        // Prevent clicking on already filled cells or after game is over
+        if (result === 'Draw') {
+            // Both players played a game but no one won
+            await playerService.updatePlayer(playerOneName, false);
+            await playerService.updatePlayer(playerTwoName, false);
+        } else {
+            // Winner gets a win, loser just played a game
+            const loserName = winnerName === playerOneName ? playerTwoName : playerOneName;
+            await playerService.updatePlayer(winnerName, true);
+            await playerService.updatePlayer(loserName, false);
+        }
+    };
+
+    const handleCellClick = (row, col) => {
         if (boardState[row][col] !== null || gameOver) return;
 
-        // Alternate between X and O
+        const newBoard = boardState.map(r => r.slice());
         newBoard[row][col] = turnCounter % 2 === 0 ? 'O' : 'X';
         setBoardState(newBoard);
+        setTurnCounter(prev => prev + 1);
+    };
 
-        // Increment turn counter if the game isn't over
-        if (!gameOver) {
-            setTurnCounter(turnCounter + 1);
-        }
-
-        console.log("Current Board State: ");
-        console.log(boardState);
-    }
-
-    function checkForWinner() {
-        // Check rows, columns, and diagonals for a win
+    const checkForWinner = async () => {
         const lines = [
-            // Rows
             ...boardState,
-            // Columns
             [boardState[0][0], boardState[1][0], boardState[2][0]],
             [boardState[0][1], boardState[1][1], boardState[2][1]],
             [boardState[0][2], boardState[1][2], boardState[2][2]],
-            // Diagonals
             [boardState[0][0], boardState[1][1], boardState[2][2]],
             [boardState[0][2], boardState[1][1], boardState[2][0]]
         ];
 
         for (let i = 0; i < lines.length; i++) {
-            const line = lines[i];
-            if (line[0] !== null && line[0] === line[1] && line[1] === line[2]) {
+            const [a, b, c] = lines[i];
+            if (a && a === b && b === c) {
                 setGameOver(true);
-                setWinType(i < 3 ? 'Row' : (i < 6 ? 'Column' : 'Diagonal'));
-                setWinningLine(i < 3 ? { type: 'row', index: i } : (i < 6 ? { type: 'column', index: i - 3 } : { type: 'diagonal', index: i - 6 }));
-                setWinner(turnCounter % 2 === 0 ? playerOneName : playerTwoName);
+                const winType = i < 3 ? 'Row' : i < 6 ? 'Column' : 'Diagonal';
+                setWinType(winType);
+                const winningLine = i < 3
+                    ? { type: 'row', index: i }
+                    : i < 6
+                        ? { type: 'column', index: i - 3 }
+                        : { type: 'diagonal', index: i - 6 };
+                setWinningLine(winningLine);
+                const currentWinner = a === 'X' ? playerOneName : playerTwoName;
+                setWinner(currentWinner);
+                await updatePlayerStats(currentWinner, winType);
                 return;
             }
         }
 
-        if (turnCounter >= 9) {
+        if (turnCounter >= 10) {
             setGameOver(true);
             setWinType('Draw');
+            setWinner(null);
+            await updatePlayerStats(null, 'Draw');
         }
-    }
+    };
 
-    // check the board state every time it changes
     useEffect(() => {
         checkForWinner();
-    }, [boardState, turnCounter]);
-
-    useEffect(() => {
-        if (winner) {
-            // Check if players exist and create them if not
-            const updatePlayerStats = async () => {
-                const player1 = await createPlayerIfNotExists(playerOneName);
-                const player2 = await createPlayerIfNotExists(playerTwoName);
-
-                // Update winner's stats
-                if (winner === playerOneName) {
-                    player1.gamesPlayed += 1;
-                    player1.gamesWon += 1;
-                    await playerService.updatePlayer(player1);
-                } else if (winner === playerTwoName) {
-                    player2.gamesPlayed += 1;
-                    player2.gamesWon += 1;
-                    await playerService.updatePlayer(player2);
-                }
-
-                // Handle draws
-                if (winType === 'Draw') {
-                    player1.gamesPlayed += 1;
-                    player2.gamesPlayed += 1;
-                    player1.draws += 1;
-                    player2.draws += 1;
-                    await playerService.updatePlayer(player1);
-                    await playerService.updatePlayer(player2);
-                }
-            };
-
-            updatePlayerStats();
-        }
-    }, [winner, gameOver, winType]);
+    }, [boardState]);
 
     return (
         <div className={styles.gameBoard}>
             <VersusCard playerOneName={playerOneName} playerTwoName={playerTwoName} />
-            
+
             <div className={styles.gameBoardDiv}>
                 {gameOver && (
                     <div className={styles.gameOverDiv}>
                         <GameOver winType={winType} winner={winner} />
                     </div>
                 )}
-                
+
                 <table className={styles.gameBoardTable}>
                     <tbody className={styles.gameBoardBody}>
                         {[0, 1, 2].map((row) => (
@@ -147,7 +117,7 @@ export default function GameBoard({ playerOneName, playerTwoName }) {
                                         className={styles.cell}
                                     >
                                         {boardState[row][col] === 'X' ? <BigX /> :
-                                         boardState[row][col] === 'O' ? <BigO /> : null}
+                                            boardState[row][col] === 'O' ? <BigO /> : null}
                                     </td>
                                 ))}
                             </tr>

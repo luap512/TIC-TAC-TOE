@@ -7,6 +7,7 @@ import java.util.Objects;
 import com.techelevator.dao.PlayerDao;
 import com.techelevator.exception.DaoException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -57,7 +58,8 @@ public class JDBCPlayerDao implements PlayerDao {
 
     @Override
     public Player getPlayerByUsername(String username) {
-        if (username == null) throw new IllegalArgumentException("Username cannot be null");
+        if (username == null)
+            throw new IllegalArgumentException("Username cannot be null");
         Player player = null;
         String sql = "SELECT * FROM players where username = ?;";
         try {
@@ -71,24 +73,42 @@ public class JDBCPlayerDao implements PlayerDao {
         return player;
     }
 
-    @Override
     public Player createPlayer(Player player) {
         Player newPlayer = null;
-        String insertUserSql = "INSERT INTO Players (username, games_played, games_won) " +
-                "values (?, 0, 0) RETURNING user_id";
+        String checkUserSql = "SELECT user_id FROM Players WHERE username = ?";
+        Integer existingUserId = null;
 
         try {
-            int newUserId = jdbcTemplate.queryForObject(insertUserSql, Integer.class,
-                    player.getUsername());
+            existingUserId = jdbcTemplate.queryForObject(checkUserSql, Integer.class, player.getUsername());
+        } catch (EmptyResultDataAccessException e) {
+            // No existing player — continue to insert
+            System.out.println("continue to insert player");
+
+        }
+
+        if (existingUserId != null) {
+            newPlayer = getPlayerById(existingUserId);
+            newPlayer.setGamesPlayed(newPlayer.getGamesPlayed() + 1);
+            updatePlayer(newPlayer);
+            return newPlayer;
+        }
+
+        // Insert new player
+        String insertUserSql = "INSERT INTO Players (username, games_played, games_won) values (?, 1, 0) RETURNING user_id";
+
+        try {
+            int newUserId = jdbcTemplate.queryForObject(insertUserSql, Integer.class, player.getUsername());
             newPlayer = getPlayerById(newUserId);
-        } catch (CannotGetJdbcConnectionException e) {
+        } catch (EmptyResultDataAccessException e) {
             throw new DaoException("Unable to connect to server or database", e);
         } catch (DataIntegrityViolationException e) {
-            updatePlayer(player);
+            // Optional retry logic if race condition occurred
             throw new DaoException("Data integrity violation", e);
         }
+
         return newPlayer;
     }
+
 
     @Override
     public Player updatePlayer(Player player) {

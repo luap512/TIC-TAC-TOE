@@ -17,7 +17,7 @@ export default function GameView() {
     useEffect(() => {
         if (isPlaying) {
             // Player One
-            playerService.getPlayerByUsername(playerOneName)
+            playerService.getPlayerById(playerOneName)
                 .then(res => {
                     console.log(`Player one exists: ${res.data.username}`);
                 })
@@ -33,7 +33,7 @@ export default function GameView() {
                 });
     
             // Player Two
-            playerService.getPlayerByUsername(playerTwoName)
+            playerService.getPlayerById(playerTwoName)
                 .then(res => {
                     console.log(`Player two exists: ${res.data.username}`);
                 })
