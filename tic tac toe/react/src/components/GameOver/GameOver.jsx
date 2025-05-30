@@ -2,7 +2,7 @@ import styles from '../GameOver/GameOver.module.css';
 import { NavLink } from 'react-router-dom';
 export default function GameOver({winType, winner}){
 
-    const isDraw = winner === '';
+    const isDraw = !winner || winner.trim() === '';
     
     return(
         <>
